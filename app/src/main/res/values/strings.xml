@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Scanner</string>
+    <string name="lbl_scan_activity">Scan QR Code</string>
+</resources>
