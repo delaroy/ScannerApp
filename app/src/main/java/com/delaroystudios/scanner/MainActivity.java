@@ -7,10 +7,14 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+
+import com.delaroystudios.scanner.utils.PreferenceUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        invalidateOptionsMenu();
         findViewById(R.id.btn_scan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,12 +60,40 @@ public class MainActivity extends AppCompatActivity {
         win.setAttributes(winParams);
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
+        if (item.getItemId() == R.id.logout) {
+            PreferenceUtils.saveMessage(true, this);
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
             finish();
         }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        MenuItem shareItem = menu.findItem(R.id.logout);
+
+        // show the button when some condition is true
+        boolean value = PreferenceUtils.getMessage(getApplicationContext());
+
+        if(value)
+        {
+            shareItem.setVisible(false);
+        }
+        else
+        {
+            shareItem.setVisible(true);
+
+
+        }
+
+        return true;
     }
 
 }

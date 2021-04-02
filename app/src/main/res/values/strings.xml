@@ -1,4 +1,27 @@
 <resources>
     <string name="app_name">Scanner</string>
     <string name="lbl_scan_activity">Scan QR Code</string>
+    <string-array name="scanner">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+
+    <string name="hint_username">Username</string>
+    <string name="hint_password">Password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="have_no_account">Have no account !</string>
+    <string name="sign_up">Sign up</string>
+    <string name="error_username">Username/Email is required</string>
+    <string name="error_password">Password is required</string>
+    <string name="add_farmers">Add Farmers</string>
+    <string name="full_name">Full name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="retype_password">Retype Password</string>
 </resources>
