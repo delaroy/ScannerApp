@@ -114,6 +114,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 //Save token to shared preference for persistence
                                 if (error == false) {
                                     PreferenceUtils.saveMessage(error, getApplicationContext());
+                                    PreferenceUtils.saveUsername(username, getApplicationContext());
 
                                     progress.setVisibility(View.GONE);
                                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();

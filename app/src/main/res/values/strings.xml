@@ -24,4 +24,18 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="retype_password">Retype Password</string>
+
+    <string-array name="names">
+        <item>PayPal</item>
+        <item>Debit/Credit Card</item>
+        <item>Gooogle Pay</item>
+    </string-array>
+
+
+
+    <string-array name="flags">
+        <item>@drawable/paypa</item>
+        <item>@drawable/debitcard</item>
+        <item>@drawable/googlepay</item>
+    </string-array>
 </resources>

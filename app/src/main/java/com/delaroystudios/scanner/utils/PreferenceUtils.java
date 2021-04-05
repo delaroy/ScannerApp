@@ -23,4 +23,17 @@ public class PreferenceUtils {
         return prefs.getBoolean(Constant.MESSAGE, true);
     }
 
+    public static boolean saveUsername(String username, Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor prefsEditor = prefs.edit();
+        prefsEditor.putString(Constant.USERNAME, username);
+        prefsEditor.apply();
+        return true;
+    }
+
+    public static String getUsername(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(Constant.USERNAME, "");
+    }
+
 }
