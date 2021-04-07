@@ -21,9 +21,10 @@
     <string name="error_password">Password is required</string>
     <string name="add_farmers">Add Farmers</string>
     <string name="full_name">Full name</string>
+    <string name="retype_password">Retype Password</string>
+    <string name="controller_login">Controller Login</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="retype_password">Retype Password</string>
 
     <string-array name="names">
         <item>PayPal</item>

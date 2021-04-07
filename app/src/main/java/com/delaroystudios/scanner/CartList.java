@@ -2,6 +2,7 @@ package com.delaroystudios.scanner;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -22,12 +24,24 @@ import com.delaroystudios.scanner.adapter.CartAdapter;
 import com.delaroystudios.scanner.adapter.ListDialog;
 import com.delaroystudios.scanner.database.AppDatabase;
 import com.delaroystudios.scanner.database.ScannerEntity;
+import com.delaroystudios.scanner.model.PaidModel;
+import com.delaroystudios.scanner.model.RegisterModel;
+import com.delaroystudios.scanner.model.RegisterResponse;
 import com.delaroystudios.scanner.model.SpinnerModel;
+import com.delaroystudios.scanner.networking.api.Service;
+import com.delaroystudios.scanner.networking.generator.DataGenerator;
 import com.delaroystudios.scanner.utils.PreferenceUtils;
 import com.delaroystudios.scanner.viewmodel.CartViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.delaroystudios.scanner.utils.Constant.BASE_URL;
 
 public class CartList extends AppCompatActivity implements CartAdapter.ItemClickListener{
     RecyclerView mRecyclerView;
@@ -39,6 +53,7 @@ public class CartList extends AppCompatActivity implements CartAdapter.ItemClick
     List<ScannerEntity> dscannerEntities = new ArrayList<>();
     Intent intent2;
     String mTitle;
+    int totalPrice = 0;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,7 +125,6 @@ public class CartList extends AppCompatActivity implements CartAdapter.ItemClick
     private void getTotal(List<ScannerEntity> scannerEntities) {
        // List<ScannerEntity> scannerList = adapter.getScannerEntities();
         //Toast.makeText(this, scannerEntities.size() + " ", Toast.LENGTH_SHORT).show();
-        int totalPrice = 0;
         mTitle = "";
 
         if (scannerEntities != null) {
@@ -140,7 +154,58 @@ public class CartList extends AppCompatActivity implements CartAdapter.ItemClick
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 1 && resultCode == Activity.RESULT_OK){
             String countryCode = data.getStringExtra(ListDialog.RESULT_LIST);
-            Toast.makeText(this, "You selected this payment: " + countryCode + ", " + "with this details " +  mTitle, Toast.LENGTH_LONG).show();
+            insertPayment(mTitle, totalPrice);
+            //Toast.makeText(this, "You selected this payment: " + countryCode + ", " + "with this details " +  mTitle, Toast.LENGTH_LONG).show();
         }
     }
+
+    public void insertPayment(String items, int amounnt) {
+        try {
+            //progress.setVisibility(View.VISIBLE);
+            Service service = DataGenerator.createService(Service.class, BASE_URL);
+            Call<RegisterResponse> createResponseCall = service.insertPayment(new PaidModel(PreferenceUtils.getUsername(this), items, amounnt, genToken()));
+
+            createResponseCall.enqueue(new Callback<RegisterResponse>() {
+                @Override
+                public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
+                    if (response.isSuccessful()) {
+                        if (response.body() != null) {
+                            RegisterResponse createResponse = response.body();
+                            boolean error = createResponse.getError();
+                            String message = createResponse.getMessage();
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<RegisterResponse> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(), "error inserting " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    //progress.setVisibility(View.GONE);
+                }
+            });
+
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "error inserting " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            //progress.setVisibility(View.GONE);
+        }
+    }
+
+    public String genToken() {
+
+        int leftLimit = 97; // letter 'a'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 10;
+        Random random = new Random();
+        StringBuilder buffer = new StringBuilder(targetStringLength);
+        for (int i = 0; i < targetStringLength; i++) {
+            int randomLimitedInt = leftLimit + (int)
+                    (random.nextFloat() * (rightLimit - leftLimit + 1));
+            buffer.append((char) randomLimitedInt);
+        }
+        String generatedString = buffer.toString();
+
+        return generatedString;
+    }
+
 }

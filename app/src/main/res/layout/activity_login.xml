@@ -6,6 +6,7 @@
     android:background="@color/white">
 
     <LinearLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipChildren="false"
@@ -94,9 +95,35 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorAccent"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
+                android:clickable="true"
                 android:text="@string/sign_up"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Controller Login"
+                android:textSize="14sp"
+                android:layout_marginRight="25dp"
+                android:layout_marginEnd="25dp" />
+            <TextView
+                android:id="@+id/controller"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="CLICK HERE"/>
         </LinearLayout>
 
         <ProgressBar

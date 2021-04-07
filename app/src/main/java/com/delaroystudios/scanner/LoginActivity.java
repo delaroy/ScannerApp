@@ -1,6 +1,7 @@
 package com.delaroystudios.scanner;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,15 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.delaroystudios.scanner.model.LoginModel;
 import com.delaroystudios.scanner.model.LoginResponse;
@@ -41,8 +46,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     TextInputLayout  username, password;
     TextInputEditText txt_username, txt_password;
     MaterialButton sign_in;
-    TextView sign_up;
+    TextView sign_up, controller;
     ProgressBar progress;
+    LinearLayout layout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,6 +59,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         password = findViewById(R.id.password);
         txt_username = findViewById(R.id.txt_username);
         txt_password = findViewById(R.id.txt_password);
+        controller = findViewById(R.id.controller);
+        layout = findViewById(R.id.layout);
 
         sign_in = findViewById(R.id.sign_in);
         sign_up = findViewById(R.id.sign_up);
@@ -60,6 +68,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         sign_in.setOnClickListener(this);
         sign_up.setOnClickListener(this);
+        controller.setOnClickListener(this);
+
     }
 
     public void verifyData() {
@@ -91,6 +101,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.sign_up:
                 Intent intent = new Intent(this, RegisterActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.controller:
+                FragmentManager fm = getSupportFragmentManager();
+                ControllerLogin alertDialog = new ControllerLogin();
+                alertDialog.show(fm, "fragment_alert");
                 break;
         }
     }
@@ -146,6 +161,55 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Toast.makeText(getApplicationContext(), "error login2", Toast.LENGTH_SHORT).show();
             progress.setVisibility(View.GONE);
         }
+    }
+
+    public void loginController() {
+
+        Toast.makeText(getApplicationContext(), "error login2", Toast.LENGTH_SHORT).show();
+        /*AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+        ViewGroup viewGroup = findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.controller_login, viewGroup, false);
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+
+
+
+       /* LayoutInflater li = LayoutInflater.from(getApplicationContext());
+        View promptsView = li.inflate(R.layout.controller_login, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                getApplicationContext());
+
+        // set alert_dialog.xml to alertdialog builder
+        alertDialogBuilder.setView(promptsView);
+
+        final EditText email = (EditText) promptsView.findViewById(R.id.email);
+        final EditText password = (EditText) promptsView.findViewById(R.id.password);
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // get user input and set it to result
+                        // edit text
+                       // Toast.makeText(getApplicationContext(), "Entered: "+userInput.getText().toString(), Toast.LENGTH_LONG).show();
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();*/
     }
 
 }

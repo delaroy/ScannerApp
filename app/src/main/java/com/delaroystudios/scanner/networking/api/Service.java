@@ -2,6 +2,7 @@ package com.delaroystudios.scanner.networking.api;
 
 import com.delaroystudios.scanner.model.LoginModel;
 import com.delaroystudios.scanner.model.LoginResponse;
+import com.delaroystudios.scanner.model.PaidModel;
 import com.delaroystudios.scanner.model.Product;
 import com.delaroystudios.scanner.model.ProductFound;
 import com.delaroystudios.scanner.model.RegisterModel;
@@ -23,4 +24,7 @@ public interface Service {
 
     @POST(Routes.LOGIN)
     Call<LoginResponse> createLogin(@Body LoginModel loginModel);
+
+    @POST(Routes.PAID)
+    Call<RegisterResponse> insertPayment(@Body PaidModel paidModel);
 }
