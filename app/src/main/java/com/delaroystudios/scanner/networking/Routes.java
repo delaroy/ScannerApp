@@ -6,4 +6,5 @@ public interface Routes {
     String REGISTER = "scanner/v1/createuser";
     String LOGIN = "scanner/v1/userlogin";
     String PAID = "scanner/v1/insertpaidrecord";
+    String CONTROLLERLOGIN = "scanner/v1/controllerlogin";
 }

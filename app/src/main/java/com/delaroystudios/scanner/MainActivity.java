@@ -65,6 +65,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.logout) {
             PreferenceUtils.saveMessage(true, this);
+            PreferenceUtils.saveUsername("", this);
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        } else if (item.getItemId()  ==  R.id.login){
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
@@ -77,19 +82,29 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
-        MenuItem shareItem = menu.findItem(R.id.logout);
+        MenuItem logout = menu.findItem(R.id.logout);
+        MenuItem login = menu.findItem(R.id.login);
 
         // show the button when some condition is true
         boolean value = PreferenceUtils.getMessage(getApplicationContext());
+        String username = PreferenceUtils.getUsername(getApplicationContext());
 
         if(value)
         {
-            shareItem.setVisible(false);
+            login.setVisible(true);
+            logout.setVisible(false);
+            if (username.equals("controller")) {
+                logout.setVisible(true);
+                login.setVisible(false);
+            } else {
+                login.setVisible(true);
+                logout.setVisible(false);
+            }
         }
         else
         {
-            shareItem.setVisible(true);
-
+            logout.setVisible(true);
+            login.setVisible(false);
 
         }
 

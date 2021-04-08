@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:padding="8dp"
-    android:layout_width="wrap_content"
+    android:layout_width="300dp"
     android:layout_height="wrap_content">
     <TextView
         android:layout_width="match_parent"
@@ -34,4 +34,10 @@
         android:layout_marginBottom="16dp"
         android:fontFamily="sans-serif"
         android:hint="@string/password"/>
+
+    <Button
+        android:id="@+id/btnDone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Log in" />
 </LinearLayout>

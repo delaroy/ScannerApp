@@ -25,6 +25,9 @@ public interface Service {
     @POST(Routes.LOGIN)
     Call<LoginResponse> createLogin(@Body LoginModel loginModel);
 
+    @POST(Routes.CONTROLLERLOGIN)
+    Call<LoginResponse> loginController(@Body LoginModel loginModel);
+
     @POST(Routes.PAID)
     Call<RegisterResponse> insertPayment(@Body PaidModel paidModel);
 }

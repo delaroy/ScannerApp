@@ -41,7 +41,7 @@ import retrofit2.Response;
 
 import static com.delaroystudios.scanner.utils.Constant.BASE_URL;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener, ControllerLogin.DialogListener {
 
     TextInputLayout  username, password;
     TextInputEditText txt_username, txt_password;
@@ -163,53 +163,60 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    public void loginController() {
-
-        Toast.makeText(getApplicationContext(), "error login2", Toast.LENGTH_SHORT).show();
-        /*AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-        ViewGroup viewGroup = findViewById(android.R.id.content);
-        View dialogView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.controller_login, viewGroup, false);
-        builder.setView(dialogView);
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-
-
-
-
-       /* LayoutInflater li = LayoutInflater.from(getApplicationContext());
-        View promptsView = li.inflate(R.layout.controller_login, null);
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                getApplicationContext());
-
-        // set alert_dialog.xml to alertdialog builder
-        alertDialogBuilder.setView(promptsView);
-
-        final EditText email = (EditText) promptsView.findViewById(R.id.email);
-        final EditText password = (EditText) promptsView.findViewById(R.id.password);
-
-        // set dialog message
-        alertDialogBuilder
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // get user input and set it to result
-                        // edit text
-                       // Toast.makeText(getApplicationContext(), "Entered: "+userInput.getText().toString(), Toast.LENGTH_LONG).show();
-                    }
-                })
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-        // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
-        alertDialog.show();*/
+    @Override
+    public void onFinishEditDialog(String email, String password) {
+        //Toast.makeText(this, email + "  "  + password, Toast.LENGTH_SHORT).show();
+        loginController(email, password);
     }
 
+    public void loginController(String username, String password){
+        try {
+            progress.setVisibility(View.VISIBLE);
+            Service service = DataGenerator.createService(Service.class, BASE_URL);
+            Call<LoginResponse> call = service.loginController(new LoginModel(username, password));
+
+            call.enqueue(new Callback<LoginResponse>() {
+                @Override
+                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                    if (response.isSuccessful()) {
+                        if (response.body() != null) {
+                            LoginResponse loginResponse = response.body();
+                            if (loginResponse.getMessage() != null) {
+                                String message = loginResponse.getMessage();
+                                boolean  error = loginResponse.getError();
+
+                                //Save token to shared preference for persistence
+                                if (error == false) {
+                                    PreferenceUtils.saveUsername("controller", getApplicationContext());
+
+                                    progress.setVisibility(View.GONE);
+                                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                } else {
+                                    //progress.setVisibility(View.GONE);
+                                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+
+                        }
+                    } else if (response.code() == 400){
+                        progress.setVisibility(View.GONE);
+                        //pin.setError(getString(R.string.wrong_pin));
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LoginResponse> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    progress.setVisibility(View.GONE);
+                }
+            });
+
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "error login2", Toast.LENGTH_SHORT).show();
+            progress.setVisibility(View.GONE);
+        }
+    }
 }
